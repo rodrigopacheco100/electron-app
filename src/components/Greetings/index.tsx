@@ -1,11 +1,29 @@
+import { useState } from 'react'
+import toast from 'react-hot-toast'
+
 import { Button } from '../Button'
 import { Container, Image, Text } from './styles'
 
 export function Greetings() {
-  function handleSayHello() {
-    window.Main.sendMessage('Hello World');
+  const [isLoading, setIsLoading] = useState(false)
 
-    console.log('Message sent! Check main process log in terminal.')
+  function handleSayHello() {
+    setIsLoading(true)
+    toast.promise(
+      new Promise(resolve =>
+        // eslint-disable-next-line no-promise-executor-return
+        setTimeout(() => {
+          resolve('')
+        }, 2000)
+      ).finally(() => {
+        setIsLoading(false)
+      }),
+      {
+        loading: 'Saving',
+        success: 'Deu bom',
+        error: 'Deu ruim',
+      }
+    )
   }
 
   return (
@@ -14,9 +32,12 @@ export function Greetings() {
         src="https://www.vectorlogo.zone/logos/reactjs/reactjs-icon.svg"
         alt="ReactJS logo"
       />
-      <Text>An Electron boilerplate including TypeScript, React, Jest and ESLint.</Text>
-      <Button onClick={handleSayHello}>Send message to main process</Button>
+      <Text>
+        An Electron boilerplate including TypeScript, React, Jest and ESLint.
+      </Text>
+      <Button onClick={handleSayHello} disabled={isLoading}>
+        Send message to main process
+      </Button>
     </Container>
   )
 }
- 

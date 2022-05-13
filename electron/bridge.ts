@@ -1,4 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron'
+import { Notification } from 'node-notifier/notifiers/notificationcenter'
 
 export const api = {
   /**
@@ -9,8 +10,8 @@ export const api = {
    * The function below can accessed using `window.Main.sendMessage`
    */
 
-  sendMessage: (message: string) => {
-    ipcRenderer.send('message', message)
+  sendNotification: (notification: Notification) => {
+    ipcRenderer.send('notification', notification)
   },
 
   /**
@@ -18,7 +19,7 @@ export const api = {
    */
   on: (channel: string, callback: Function) => {
     ipcRenderer.on(channel, (_, data) => callback(data))
-  }
+  },
 }
 
 contextBridge.exposeInMainWorld('Main', api)
